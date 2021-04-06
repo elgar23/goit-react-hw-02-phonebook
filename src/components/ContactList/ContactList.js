@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import styles from "./ContactList.module.css";
 
-const ContactList = ({ contacts, onRemoveContact }) => (
-  <ul className={styles.TaskList}>
+const ContactList = ({ contacts, onDeleteContact }) => {
+  return (
+    <ul className={styles.TaskList}>
     {contacts.map((contact) => (
       <li className = {styles.TaskList_item}key={contact.id}>
         {contact.name + ":" + contact.number}
@@ -12,22 +12,23 @@ const ContactList = ({ contacts, onRemoveContact }) => (
             className={styles.TaskList_button}
             type="button"
             name="delte"
-            onClick={() => onRemoveContact(contact.id)}
+            onClick={() => onDeleteContact(contact.id)}
           >
-            delete
+            Delete
           </button>
         }
-      </li>
-    ))}
-  </ul>
-);
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 ContactList.propTypes = {
-  onRemoveContact: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-  })),
-}
+  contacts: PropTypes.array.isRequired,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  number: PropTypes.number,
+  onDeleteContact: PropTypes.func.isRequired,
+};
+
 export default ContactList;

@@ -1,27 +1,31 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from "./ContactForm.module.css";
-
-export default class ContactForm extends Component {
+class ContactForm extends Component {
   state = {
-    name: "",
-    number: "",
+    name: '',
+    number: '',
   };
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
+  handleChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+
+    this.props.onSubmit(this.state);
+    this.reset();
+  };
+
+  reset = () => {
     this.setState({
-      [name]: value,
+      name: '',
+      number: '',
     });
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    this.props.onAddContact({ ...this.state });
-
-    this.setState({ name: "", number: "" });
-  };
   render() {
     return (
       <form className={styles.TaskEditor} onSubmit={this.handleSubmit}>
@@ -33,6 +37,9 @@ export default class ContactForm extends Component {
             name="name"
             value={this.state.name}
             onChange={this.handleChange}
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+  title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+  required
           />
         </label>
         <label className={styles.TaskEditor_label}>
@@ -43,6 +50,9 @@ export default class ContactForm extends Component {
             name="number"
             value={this.state.number}
             onChange={this.handleChange}
+            pattern="(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})"
+  title="Номер телефона должен состоять из 11-12 цифр и может содержать цифры, пробелы, тире, пузатые скобки и может начинаться с +"
+  required
           />
         </label>
         <button className={styles.TaskEditor_button} type="submit">
@@ -54,7 +64,8 @@ export default class ContactForm extends Component {
 }
 
 ContactForm.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  number: PropTypes.number,
 };
+
+export default ContactForm;
